@@ -11,20 +11,20 @@ public class Boid {
     private Vector acceleration = new Vector();
     private double maxSpeed;
     private double maxForce;
-    private Sketch engine;
+    private Game engine;
 
-    public Boid(double maxSpeed, double maxForce, Sketch engine) {
+    public Boid(double maxSpeed, double maxForce, Game engine) {
         this.maxSpeed = maxSpeed;
         this.maxForce = maxForce;
         this.engine = engine;
 
-        var w = Math.random() * engine.getWidth();
-        var h = Math.random() * engine.getHeight();
+        var w = Math.random() * Game.WIDTH;
+        var h = Math.random() * Game.HEIGHT;
         position = new Vector(w, h);
         velocity = Vector.random2D();
     }
 
-    public Boid(double x, double y, double maxSpeed, double maxForce, Sketch engine) {
+    public Boid(double x, double y, double maxSpeed, double maxForce, Game engine) {
         this.maxSpeed = maxSpeed;
         this.maxForce = maxForce;
         this.engine = engine;
@@ -54,7 +54,7 @@ public class Boid {
         border();
     }
 
-    public void show(Graphics g) {
+    public void render(Graphics g) {
         g.setColor(Color.white);
 
         Graphics2D g2d = (Graphics2D) g;
@@ -76,29 +76,27 @@ public class Boid {
     private void border() {
         var x = position.getX();
         var y = position.getY();
-        var width = engine.getWidth();
-        var height = engine.getHeight();
 
-        if (x > width)
+        if (x > Game.WIDTH)
             position.setX(0);
         else if (x < 0)
-            position.setX(width);
+            position.setX(Game.WIDTH);
 
-        if (y > height)
+        if (y > Game.HEIGHT)
             position.setY(0);
         else if (y < 0)
-            position.setY(height);
+            position.setY(Game.HEIGHT);
 
     }
 
     private Vector align() {
-        var neighborDist = 100;
+        var neighborRadius = 50;
         var steering = new Vector();
         var count = 0;
 
         var quadTree = engine.getQuadTree();
         List<Boid> neighbors = quadTree
-                .query(new Rectangle(position.getX(), position.getY(), neighborDist, neighborDist));
+                .query(new Rectangle(position.getX(), position.getY(), neighborRadius, neighborRadius));
 
         for (Boid boid : neighbors) {
             if (!boid.equals(this)) {
@@ -118,13 +116,13 @@ public class Boid {
     }
 
     private Vector cohesion() {
-        var neighborDist = 100;
+        var neighborRadius = 50;
         var steering = new Vector();
         var count = 0;
 
         var quadTree = engine.getQuadTree();
         List<Boid> neighbors = quadTree
-                .query(new Rectangle(position.getX(), position.getY(), neighborDist, neighborDist));
+                .query(new Rectangle(position.getX(), position.getY(), neighborRadius, neighborRadius));
 
         for (Boid boid : neighbors) {
             if (!boid.equals(this)) {
@@ -145,13 +143,13 @@ public class Boid {
     }
 
     private Vector seperation() {
-        var neighborDist = 50;
+        var neighborRadius = 25;
         var steering = new Vector();
         var count = 0;
 
         var quadTree = engine.getQuadTree();
         List<Boid> neighbors = quadTree
-                .query(new Rectangle(position.getX(), position.getY(), neighborDist, neighborDist));
+                .query(new Rectangle(position.getX(), position.getY(), neighborRadius, neighborRadius));
 
         for (Boid boid : neighbors) {
             if (!boid.equals(this)) {
