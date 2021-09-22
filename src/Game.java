@@ -15,7 +15,7 @@ public class Game extends Canvas implements Runnable {
 
 	public Game() {
 		quadTree = new QuadTree(new Rectangle(0, 0, WIDTH, HEIGHT), 4);
-		for (int i = 0; i < 400; i++) {
+		for (int i = 0; i < 20; i++) {
 			quadTree.insert(new Boid(4, 0.5, this));
 		}
 
@@ -102,13 +102,6 @@ public class Game extends Canvas implements Runnable {
 		List<Boid> boids = quadTree.getAll();
 		for (Boid boid : boids) {
 			boid.render(g);
-		}
-
-		List<Rectangle> zones = quadTree.getAllZones();
-		g.setColor(Color.red);
-		for (Rectangle rectangle : zones) {
-			g.drawRect((int) rectangle.getX(), (int) rectangle.getY(), (int) rectangle.getWidth(),
-					(int) rectangle.getHeight());
 		}
 
 		/////////////////////////////////////

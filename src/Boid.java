@@ -55,6 +55,16 @@ public class Boid {
     }
 
     public void render(Graphics g) {
+        g.setColor(Color.green);
+
+        var quadTree = engine.getQuadTree();
+        var rect = new Rectangle(position.getX() - 50, position.getY() - 50, 100, 100);
+        List<Boid> neighbors = quadTree.query(rect);
+        g.drawRect((int) rect.getX(), (int) rect.getY(), (int) rect.getWidth(), (int) rect.getHeight());
+        for (Boid boid : neighbors) {
+            g.fillRect((int) boid.getPosition().getX(), (int) boid.getPosition().getY(), 8, 8);
+        }
+
         g.setColor(Color.white);
 
         Graphics2D g2d = (Graphics2D) g;
@@ -90,13 +100,13 @@ public class Boid {
     }
 
     private Vector align() {
-        var neighborRadius = 50;
+        var neighborRadius = 100d;
         var steering = new Vector();
         var count = 0;
 
         var quadTree = engine.getQuadTree();
-        List<Boid> neighbors = quadTree
-                .query(new Rectangle(position.getX(), position.getY(), neighborRadius, neighborRadius));
+        List<Boid> neighbors = quadTree.query(new Rectangle(position.getX() - neighborRadius / 2,
+                position.getY() - neighborRadius / 2, neighborRadius, neighborRadius));
 
         for (Boid boid : neighbors) {
             if (!boid.equals(this)) {
@@ -116,13 +126,13 @@ public class Boid {
     }
 
     private Vector cohesion() {
-        var neighborRadius = 50;
+        var neighborRadius = 100d;
         var steering = new Vector();
         var count = 0;
 
         var quadTree = engine.getQuadTree();
-        List<Boid> neighbors = quadTree
-                .query(new Rectangle(position.getX(), position.getY(), neighborRadius, neighborRadius));
+        List<Boid> neighbors = quadTree.query(new Rectangle(position.getX() - neighborRadius / 2,
+                position.getY() - neighborRadius / 2, neighborRadius, neighborRadius));
 
         for (Boid boid : neighbors) {
             if (!boid.equals(this)) {
@@ -143,13 +153,13 @@ public class Boid {
     }
 
     private Vector seperation() {
-        var neighborRadius = 25;
+        var neighborRadius = 50d;
         var steering = new Vector();
         var count = 0;
 
         var quadTree = engine.getQuadTree();
-        List<Boid> neighbors = quadTree
-                .query(new Rectangle(position.getX(), position.getY(), neighborRadius, neighborRadius));
+        List<Boid> neighbors = quadTree.query(new Rectangle(position.getX() - neighborRadius / 2,
+                position.getY() - neighborRadius / 2, neighborRadius, neighborRadius));
 
         for (Boid boid : neighbors) {
             if (!boid.equals(this)) {
