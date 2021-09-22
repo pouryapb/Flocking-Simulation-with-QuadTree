@@ -7,15 +7,16 @@ import java.util.List;
 public class Game extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = -5571995104017886412L;
-	public static final int WIDTH = 800;
+	public static final int WIDTH = 1250;
 	public static final int HEIGHT = WIDTH / 12 * 9;
 	private transient Thread thread;
 	private boolean running = false;
 	private transient QuadTree quadTree;
+	private static final int CAPACITY = 20;
 
 	public Game() {
-		quadTree = new QuadTree(new Rectangle(0, 0, WIDTH, HEIGHT), 4);
-		for (int i = 0; i < 20; i++) {
+		quadTree = new QuadTree(new Rectangle(0, 0, WIDTH, HEIGHT), CAPACITY);
+		for (int i = 0; i < 1000; i++) {
 			quadTree.insert(new Boid(4, 0.5, this));
 		}
 
@@ -74,7 +75,7 @@ public class Game extends Canvas implements Runnable {
 
 	public void update() {
 		List<Boid> boids = quadTree.getAll();
-		QuadTree nextQuadTree = new QuadTree(new Rectangle(0, 0, WIDTH, HEIGHT), 4);
+		QuadTree nextQuadTree = new QuadTree(new Rectangle(0, 0, WIDTH, HEIGHT), CAPACITY);
 
 		for (Boid boid : boids) {
 			boid.update();

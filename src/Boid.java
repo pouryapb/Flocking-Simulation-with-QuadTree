@@ -55,16 +55,6 @@ public class Boid {
     }
 
     public void render(Graphics g) {
-        g.setColor(Color.green);
-
-        var quadTree = engine.getQuadTree();
-        var rect = new Rectangle(position.getX() - 50, position.getY() - 50, 100, 100);
-        List<Boid> neighbors = quadTree.query(rect);
-        g.drawRect((int) rect.getX(), (int) rect.getY(), (int) rect.getWidth(), (int) rect.getHeight());
-        for (Boid boid : neighbors) {
-            g.fillRect((int) boid.getPosition().getX(), (int) boid.getPosition().getY(), 8, 8);
-        }
-
         g.setColor(Color.white);
 
         Graphics2D g2d = (Graphics2D) g;
@@ -109,7 +99,7 @@ public class Boid {
                 position.getY() - neighborRadius / 2, neighborRadius, neighborRadius));
 
         for (Boid boid : neighbors) {
-            if (!boid.equals(this)) {
+            if (boid != this) {
                 steering.add(boid.getVelocity());
                 count++;
             }
@@ -135,7 +125,7 @@ public class Boid {
                 position.getY() - neighborRadius / 2, neighborRadius, neighborRadius));
 
         for (Boid boid : neighbors) {
-            if (!boid.equals(this)) {
+            if (boid != this) {
                 steering.add(boid.getPosition());
                 count++;
             }
@@ -162,7 +152,7 @@ public class Boid {
                 position.getY() - neighborRadius / 2, neighborRadius, neighborRadius));
 
         for (Boid boid : neighbors) {
-            if (!boid.equals(this)) {
+            if (boid != this) {
                 double d = position.dist(boid.getPosition());
                 var diff = Vector.sub(position, boid.getPosition());
                 diff.mult(1 / d);

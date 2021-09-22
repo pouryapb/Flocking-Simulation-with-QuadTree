@@ -48,6 +48,7 @@ public class Rectangle {
     }
 
     public boolean intersects(Rectangle range) {
-        return !(range.getX() > width || range.getY() > height || range.getWidth() < x || range.getHeight() < y);
+        return !(range.getX() > x + width || range.getY() > y + height || range.getX() + range.getWidth() < x
+                || range.getY() + range.getHeight() < y);
     }
 }
