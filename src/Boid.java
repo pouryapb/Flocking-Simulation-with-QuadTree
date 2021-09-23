@@ -12,6 +12,9 @@ public class Boid {
     private double maxSpeed;
     private double maxForce;
     private Game engine;
+    private double alingNeighborRadius = 150;
+    private double cohisionNeighborRadius = 100;
+    private double seperationNeighborRadius = 50;
 
     public Boid(double maxSpeed, double maxForce, Game engine) {
         this.maxSpeed = maxSpeed;
@@ -54,6 +57,22 @@ public class Boid {
         border();
     }
 
+    private void border() {
+        var x = position.getX();
+        var y = position.getY();
+
+        if (x > Game.WIDTH)
+            position.setX(0);
+        else if (x < 0)
+            position.setX(Game.WIDTH - 1d);
+
+        if (y > Game.HEIGHT)
+            position.setY(0);
+        else if (y < 0)
+            position.setY(Game.HEIGHT - 1d);
+
+    }
+
     public void render(Graphics g) {
         g.setColor(Color.white);
 
@@ -73,30 +92,13 @@ public class Boid {
         g2d.setTransform(transform);
     }
 
-    private void border() {
-        var x = position.getX();
-        var y = position.getY();
-
-        if (x > Game.WIDTH)
-            position.setX(0);
-        else if (x < 0)
-            position.setX(Game.WIDTH);
-
-        if (y > Game.HEIGHT)
-            position.setY(0);
-        else if (y < 0)
-            position.setY(Game.HEIGHT);
-
-    }
-
     private Vector align() {
-        var neighborRadius = 100d;
         var steering = new Vector();
         var count = 0;
 
         var quadTree = engine.getQuadTree();
-        List<Boid> neighbors = quadTree.query(new Rectangle(position.getX() - neighborRadius / 2,
-                position.getY() - neighborRadius / 2, neighborRadius, neighborRadius));
+        List<Boid> neighbors = quadTree.query(new Rectangle(position.getX() - alingNeighborRadius / 2,
+                position.getY() - alingNeighborRadius / 2, alingNeighborRadius, alingNeighborRadius));
 
         for (Boid boid : neighbors) {
             if (boid != this) {
@@ -116,13 +118,12 @@ public class Boid {
     }
 
     private Vector cohesion() {
-        var neighborRadius = 100d;
         var steering = new Vector();
         var count = 0;
 
         var quadTree = engine.getQuadTree();
-        List<Boid> neighbors = quadTree.query(new Rectangle(position.getX() - neighborRadius / 2,
-                position.getY() - neighborRadius / 2, neighborRadius, neighborRadius));
+        List<Boid> neighbors = quadTree.query(new Rectangle(position.getX() - cohisionNeighborRadius / 2,
+                position.getY() - cohisionNeighborRadius / 2, cohisionNeighborRadius, cohisionNeighborRadius));
 
         for (Boid boid : neighbors) {
             if (boid != this) {
@@ -143,13 +144,12 @@ public class Boid {
     }
 
     private Vector seperation() {
-        var neighborRadius = 50d;
         var steering = new Vector();
         var count = 0;
 
         var quadTree = engine.getQuadTree();
-        List<Boid> neighbors = quadTree.query(new Rectangle(position.getX() - neighborRadius / 2,
-                position.getY() - neighborRadius / 2, neighborRadius, neighborRadius));
+        List<Boid> neighbors = quadTree.query(new Rectangle(position.getX() - seperationNeighborRadius / 2,
+                position.getY() - seperationNeighborRadius / 2, seperationNeighborRadius, seperationNeighborRadius));
 
         for (Boid boid : neighbors) {
             if (boid != this) {

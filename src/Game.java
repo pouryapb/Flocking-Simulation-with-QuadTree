@@ -12,15 +12,15 @@ public class Game extends Canvas implements Runnable {
 	private transient Thread thread;
 	private boolean running = false;
 	private transient QuadTree quadTree;
-	private static final int CAPACITY = 20;
+	private static final int CAPACITY = 5;
 
 	public Game() {
 		quadTree = new QuadTree(new Rectangle(0, 0, WIDTH, HEIGHT), CAPACITY);
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 800; i++) {
 			quadTree.insert(new Boid(4, 0.5, this));
 		}
 
-		new Window(WIDTH, HEIGHT, "Flocking Simulation Improved", this);
+		new Window(WIDTH, HEIGHT, "Flocking Simulation With QuadTree", this);
 	}
 
 	public QuadTree getQuadTree() {
